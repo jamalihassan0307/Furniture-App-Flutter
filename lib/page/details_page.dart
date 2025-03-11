@@ -4,6 +4,7 @@ import 'package:uidesign03/core/space.dart';
 import 'package:uidesign03/core/text_style.dart';
 import 'package:uidesign03/model/model.dart';
 import 'package:uidesign03/model/cart_model.dart';
+import 'package:provider/provider.dart';
 
 class DetailsPage extends StatefulWidget {
   final Model model;
@@ -16,38 +17,10 @@ class DetailsPage extends StatefulWidget {
 class _DetailsPageState extends State<DetailsPage> {
   int selectIndex = 0;
   int qty = 1;
-  final CartManager _cartManager = CartManager();
-
-  @override
-  void initState() {
-    super.initState();
-    _cartManager.addListener(_onCartChanged);
-  }
-
-  @override
-  void dispose() {
-    _cartManager.removeListener(_onCartChanged);
-    super.dispose();
-  }
-
-  void _onCartChanged(String itemId) {
-    if (mounted && itemId == widget.model.id) {
-      setState(() {});
-    }
-  }
-
-  void _addToCart() {
-    final item = CartItem(
-      id: widget.model.id,
-      name: widget.model.name,
-      image: widget.model.image[0],
-      price: double.parse(widget.model.price.replaceAll('\$', '')),
-    );
-    _cartManager.addItem(item);
-  }
 
   @override
   Widget build(BuildContext context) {
+    final cartManager = Provider.of<CartManager>(context);
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
@@ -250,21 +223,33 @@ class _DetailsPageState extends State<DetailsPage> {
                         color: primary,
                         borderRadius: BorderRadius.circular(50.0),
                       ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            _cartManager.isInCart(widget.model.id) ? 'In Cart' : 'Add to Cart',
-                            style: itemCardHeading.copyWith(color: white),
-                          ),
-                          SizedBox(width: 8),
-                          Icon(
-                            _cartManager.isInCart(widget.model.id)
-                                ? Icons.shopping_cart
-                                : Icons.add_shopping_cart_outlined,
-                            color: white,
-                          ),
-                        ],
+                      child: MaterialButton(
+                        onPressed: () {
+                          final item = CartItem(
+                            id: widget.model.id,
+                            name: widget.model.name,
+                            image: widget.model.image[0],
+                            price: double.parse(widget.model.price.replaceAll('\$', '')),
+                            quantity: qty,
+                          );
+                          cartManager.addItem(item);
+                        },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              cartManager.isInCart(widget.model.id) ? 'Update Cart' : 'Add to Cart',
+                              style: itemCardHeading.copyWith(color: white),
+                            ),
+                            SizedBox(width: 8),
+                            Icon(
+                              cartManager.isInCart(widget.model.id)
+                                  ? Icons.shopping_cart
+                                  : Icons.add_shopping_cart_outlined,
+                              color: white,
+                            ),
+                          ],
+                        ),
                       ),
                     )
                   ],

@@ -4,6 +4,7 @@ import 'package:uidesign03/core/text_style.dart';
 import 'package:uidesign03/model/model.dart';
 import 'package:uidesign03/page/details_page.dart';
 import 'package:uidesign03/model/cart_model.dart';
+import 'package:provider/provider.dart';
 
 class GridItemCard extends StatefulWidget {
   final Model model;
@@ -14,7 +15,6 @@ class GridItemCard extends StatefulWidget {
 }
 
 class _GridItemCardState extends State<GridItemCard> with SingleTickerProviderStateMixin {
-  final CartManager _cartManager = CartManager();
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
 
@@ -28,34 +28,28 @@ class _GridItemCardState extends State<GridItemCard> with SingleTickerProviderSt
     _scaleAnimation = Tween<double>(begin: 1, end: 0.95).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
-    _cartManager.addListener(_onCartChanged);
   }
 
   @override
   void dispose() {
-    _cartManager.removeListener(_onCartChanged);
     _controller.dispose();
     super.dispose();
   }
 
-  void _onCartChanged(String itemId) {
-    if (mounted && itemId == widget.model.id) {
-      setState(() {});
-    }
-  }
-
-  void _addToCart() {
-    final item = CartItem(
-      id: widget.model.id,
-      name: widget.model.name,
-      image: widget.model.image[0],
-      price: double.parse(widget.model.price.replaceAll('\$', '')),
-    );
-    _cartManager.addItem(item);
-  }
-
   @override
   Widget build(BuildContext context) {
+    final cartManager = Provider.of<CartManager>(context);
+    
+    void _addToCart() {
+      final item = CartItem(
+        id: widget.model.id,
+        name: widget.model.name,
+        image: widget.model.image[0],
+        price: double.parse(widget.model.price.replaceAll('\$', '')),
+      );
+      cartManager.addItem(item);
+    }
+
     return GestureDetector(
       onTapDown: (_) => _controller.forward(),
       onTapUp: (_) => _controller.reverse(),
@@ -110,43 +104,47 @@ class _GridItemCardState extends State<GridItemCard> with SingleTickerProviderSt
                   Expanded(
                     flex: 2,
                     child: Padding(
-                      padding: EdgeInsets.all(10),
+                      padding: EdgeInsets.all(8),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             widget.model.name,
-                            style: itemCardHeading.copyWith(fontSize: 16),
+                            style: itemCardHeading.copyWith(fontSize: 14),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          Text(
-                            widget.model.description,
-                            style: itemCardDes.copyWith(fontSize: 12),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
+                          SizedBox(height: 4),
+                          Expanded(
+                            child: Text(
+                              widget.model.description,
+                              style: itemCardDes.copyWith(fontSize: 12),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 widget.model.price,
-                                style: itemCardPrice.copyWith(fontSize: 16),
+                                style: itemCardPrice.copyWith(fontSize: 14),
                               ),
                               Container(
-                                padding: EdgeInsets.all(5),
+                                width: 28,
+                                height: 28,
                                 decoration: BoxDecoration(
                                   color: primary,
-                                  borderRadius: BorderRadius.circular(5),
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: IconButton(
+                                  padding: EdgeInsets.zero,
                                   icon: Icon(
-                                    _cartManager.isInCart(widget.model.id)
+                                    cartManager.isInCart(widget.model.id)
                                         ? Icons.shopping_cart
                                         : Icons.add_shopping_cart_outlined,
                                     color: white,
-                                    size: 18,
+                                    size: 16,
                                   ),
                                   onPressed: _addToCart,
                                 ),

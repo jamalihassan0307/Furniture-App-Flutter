@@ -24,10 +24,11 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_svg: ^0.22.0
+  flutter_svg:
   intl: ^0.17.0
   animations: ^2.0.1
   provider: ^6.0.0
+  flutter_launcher_icons: ^0.14.3
 
   cupertino_icons: ^1.0.2
 
@@ -35,6 +36,11 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/sofa8.jpg"
+  min_sdk_android: 21
 
 flutter:
   uses-material-design: true
