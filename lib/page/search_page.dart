@@ -54,122 +54,196 @@ class _SearchPageState extends State<SearchPage> {
       body: SafeArea(
         child: Column(
           children: [
-            Padding(
+            // Header and Search Section
+            Container(
               padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: white,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: black.withOpacity(0.05),
+                    blurRadius: 15,
+                    offset: Offset(0, 5),
+                  ),
+                ],
+              ),
               child: Column(
                 children: [
+                  // Back Button and Title
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.arrow_back_ios, color: primary),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                      Text(
+                        'Search Products',
+                        style: heading.copyWith(
+                          fontSize: 24,
+                          color: black.withOpacity(0.8),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
                   // Search Bar
                   Container(
                     decoration: BoxDecoration(
-                      color: white,
+                      color: background,
                       borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
-                        BoxShadow(
-                          color: black.withOpacity(0.1),
-                          blurRadius: 10,
-                          offset: Offset(0, 5),
-                        ),
-                      ],
+                      border: Border.all(color: primary.withOpacity(0.1)),
                     ),
                     child: TextField(
                       controller: _searchController,
                       onChanged: (value) => _filterItems(),
                       decoration: InputDecoration(
                         hintText: 'Search furniture...',
+                        hintStyle: subHeading.copyWith(
+                          color: lightBlack.withOpacity(0.5),
+                        ),
                         prefixIcon: Icon(Icons.search, color: primary),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _isFiltering
-                                ? Icons.filter_list
-                                : Icons.filter_list_outlined,
-                            color: primary,
+                        suffixIcon: AnimatedRotation(
+                          duration: Duration(milliseconds: 300),
+                          turns: _isFiltering ? 0.25 : 0,
+                          child: IconButton(
+                            icon: Icon(Icons.tune, color: primary),
+                            onPressed: () {
+                              setState(() {
+                                _isFiltering = !_isFiltering;
+                              });
+                            },
                           ),
-                          onPressed: () {
-                            setState(() {
-                              _isFiltering = !_isFiltering;
-                            });
-                          },
                         ),
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.symmetric(horizontal: 20),
                       ),
                     ),
                   ),
-                  if (_isFiltering) ...[
-                    SizedBox(height: 20),
-                    // Category Filter
-                    Container(
-                      height: 50,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: _categories.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: EdgeInsets.only(right: 10),
-                            child: ChoiceChip(
-                              label: Text(_categories[index]),
-                              selected: _selectedCategory == _categories[index],
-                              onSelected: (selected) {
+                  // Filters
+                  AnimatedContainer(
+                    duration: Duration(milliseconds: 300),
+                    height: _isFiltering ? null : 0,
+                    child: Column(
+                      children: [
+                        SizedBox(height: 20),
+                        // Categories
+                        Container(
+                          height: 40,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: _categories.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: EdgeInsets.only(right: 10),
+                                child: AnimatedContainer(
+                                  duration: Duration(milliseconds: 300),
+                                  child: FilterChip(
+                                    label: Text(_categories[index]),
+                                    selected: _selectedCategory == _categories[index],
+                                    onSelected: (selected) {
+                                      setState(() {
+                                        _selectedCategory = _categories[index];
+                                        _filterItems();
+                                      });
+                                    },
+                                    selectedColor: primary,
+                                    backgroundColor: background,
+                                    labelStyle: TextStyle(
+                                      color: _selectedCategory == _categories[index]
+                                          ? white
+                                          : primary,
+                                    ),
+                                    elevation: 0,
+                                    pressElevation: 2,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        // Price Range
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Price Range',
+                                  style: subHeading.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                Text(
+                                  '\$${_currentPriceRange.start.toInt()} - \$${_currentPriceRange.end.toInt()}',
+                                  style: subHeading.copyWith(
+                                    color: primary,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            RangeSlider(
+                              values: _currentPriceRange,
+                              min: 0,
+                              max: 1000,
+                              divisions: 20,
+                              activeColor: primary,
+                              inactiveColor: primary.withOpacity(0.2),
+                              labels: RangeLabels(
+                                '\$${_currentPriceRange.start.toInt()}',
+                                '\$${_currentPriceRange.end.toInt()}',
+                              ),
+                              onChanged: (RangeValues values) {
                                 setState(() {
-                                  _selectedCategory = _categories[index];
+                                  _currentPriceRange = values;
                                   _filterItems();
                                 });
                               },
-                              selectedColor: primary,
-                              labelStyle: TextStyle(
-                                color: _selectedCategory == _categories[index]
-                                    ? white
-                                    : primary,
-                              ),
                             ),
-                          );
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    // Price Range Slider
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Price Range: \$${_currentPriceRange.start.toInt()} - \$${_currentPriceRange.end.toInt()}',
-                          style: subHeading,
-                        ),
-                        RangeSlider(
-                          values: _currentPriceRange,
-                          min: 0,
-                          max: 1000,
-                          divisions: 20,
-                          activeColor: primary,
-                          inactiveColor: primary.withOpacity(0.2),
-                          labels: RangeLabels(
-                            '\$${_currentPriceRange.start.toInt()}',
-                            '\$${_currentPriceRange.end.toInt()}',
-                          ),
-                          onChanged: (RangeValues values) {
-                            setState(() {
-                              _currentPriceRange = values;
-                              _filterItems();
-                            });
-                          },
+                          ],
                         ),
                       ],
                     ),
-                  ],
+                  ),
                 ],
               ),
             ),
-            // Results
+            // Results Section
             Expanded(
               child: _filteredItems.isEmpty
                   ? Center(
-                      child: Text(
-                        'No items found',
-                        style: subHeading,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.search_off_rounded,
+                            size: 80,
+                            color: primary.withOpacity(0.5),
+                          ),
+                          SizedBox(height: 16),
+                          Text(
+                            'No items found',
+                            style: subHeading.copyWith(
+                              color: primary.withOpacity(0.7),
+                            ),
+                          ),
+                        ],
                       ),
                     )
-                  : ListView.builder(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
+                  : GridView.builder(
+                      padding: EdgeInsets.all(20),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 0.75,
+                        crossAxisSpacing: 15,
+                        mainAxisSpacing: 15,
+                      ),
                       itemCount: _filteredItems.length,
                       itemBuilder: (context, index) {
                         return ItemCard(model: _filteredItems[index]);
