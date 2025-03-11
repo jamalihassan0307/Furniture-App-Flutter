@@ -3,6 +3,7 @@ import 'package:uidesign03/core/color.dart';
 import 'package:uidesign03/core/text_style.dart';
 import 'package:uidesign03/model/model.dart';
 import 'package:uidesign03/page/details_page.dart';
+import 'package:uidesign03/model/cart_model.dart';
 
 class GridItemCard extends StatefulWidget {
   final Model model;
@@ -13,6 +14,7 @@ class GridItemCard extends StatefulWidget {
 }
 
 class _GridItemCardState extends State<GridItemCard> with SingleTickerProviderStateMixin {
+  final CartManager _cartManager = CartManager();
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
 
@@ -26,12 +28,30 @@ class _GridItemCardState extends State<GridItemCard> with SingleTickerProviderSt
     _scaleAnimation = Tween<double>(begin: 1, end: 0.95).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
+    _cartManager.addListener(_onCartChanged);
   }
 
   @override
   void dispose() {
+    _cartManager.removeListener(_onCartChanged);
     _controller.dispose();
     super.dispose();
+  }
+
+  void _onCartChanged(String itemId) {
+    if (mounted && itemId == widget.model.id) {
+      setState(() {});
+    }
+  }
+
+  void _addToCart() {
+    final item = CartItem(
+      id: widget.model.id,
+      name: widget.model.name,
+      image: widget.model.image[0],
+      price: double.parse(widget.model.price.replaceAll('\$', '')),
+    );
+    _cartManager.addItem(item);
   }
 
   @override
@@ -120,10 +140,15 @@ class _GridItemCardState extends State<GridItemCard> with SingleTickerProviderSt
                                   color: primary,
                                   borderRadius: BorderRadius.circular(5),
                                 ),
-                                child: Icon(
-                                  Icons.add,
-                                  color: white,
-                                  size: 18,
+                                child: IconButton(
+                                  icon: Icon(
+                                    _cartManager.isInCart(widget.model.id)
+                                        ? Icons.shopping_cart
+                                        : Icons.add_shopping_cart_outlined,
+                                    color: white,
+                                    size: 18,
+                                  ),
+                                  onPressed: _addToCart,
                                 ),
                               ),
                             ],
