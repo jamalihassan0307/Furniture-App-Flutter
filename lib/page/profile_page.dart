@@ -14,6 +14,7 @@ class ProfilePage extends StatelessWidget {
             // Profile Header with Gradient and Pattern
             Container(
               height: 280,
+              width: double.infinity,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
