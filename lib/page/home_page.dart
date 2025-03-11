@@ -6,6 +6,7 @@ import 'package:uidesign03/data/model_data.dart';
 import 'package:uidesign03/widgets/Custom_app_bar.dart';
 import 'package:uidesign03/widgets/item_card.dart';
 import 'package:uidesign03/widgets/tabbar_button.dart';
+import 'package:uidesign03/page/search_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -127,6 +128,12 @@ class _HomePageState extends State<HomePage> {
         setState(() {
           selectedNavIndex = index;
         });
+        if (index == 1) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SearchPage()),
+          );
+        }
       },
       child: AnimatedContainer(
         duration: Duration(milliseconds: 200),
