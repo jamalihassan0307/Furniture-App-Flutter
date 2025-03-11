@@ -49,7 +49,7 @@ class HomePage extends StatelessWidget {
         elevation: 0.0,
         child: Container(
           height: 100.0,
-          color: green,
+          color: primary,
           child: Stack(
             children: [
               Align(

@@ -191,7 +191,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       height: 40.0,
                       padding: EdgeInsets.symmetric(horizontal: 20.0),
                       decoration: BoxDecoration(
-                        color: green,
+                        color: primary,
                         borderRadius: BorderRadius.circular(50.0),
                       ),
                       child: Center(
