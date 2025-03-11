@@ -4,7 +4,7 @@ import 'package:uidesign03/core/space.dart';
 import 'package:uidesign03/core/text_style.dart';
 import 'package:uidesign03/data/model_data.dart';
 import 'package:uidesign03/widgets/Custom_app_bar.dart';
-import 'package:uidesign03/widgets/item_card.dart';
+import 'package:uidesign03/widgets/grid_item_card.dart';
 import 'package:uidesign03/widgets/tabbar_button.dart';
 import 'package:uidesign03/page/search_page.dart';
 
@@ -16,6 +16,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int selectedCategory = 0;
   int selectedNavIndex = 0;
+  final PageController _pageController = PageController();
 
   List get filteredModels {
     if (selectedCategory == 0) {
@@ -39,58 +40,28 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: background,
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CustomAppBar(),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Discover',
-                    style: heading.copyWith(
-                      fontSize: 32,
-                      color: black.withOpacity(0.8),
-                    ),
-                  ),
-                  Text(
-                    'Find your perfect furniture',
-                    style: subHeading.copyWith(fontSize: 16),
-                  ),
-                ],
-              ),
-            ),
-            SpaceVH(height: 20),
-            Container(
-              height: 70.0,
-              child: TabBarButton(
-                onCategorySelected: (categoryId) {
-                  setState(() {
-                    selectedCategory = categoryId;
-                  });
-                },
-              ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                padding: EdgeInsets.symmetric(horizontal: 20.0),
-                physics: BouncingScrollPhysics(),
-                itemCount: filteredModels.length,
-                itemBuilder: (builder, index) {
-                  final model = filteredModels[index];
-                  return ItemCard(model: model);
-                },
-              ),
-            ),
-          ],
-        ),
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (index) {
+          setState(() {
+            selectedNavIndex = index;
+          });
+        },
+        children: [
+          _buildHomePage(),
+          SearchPage(),
+          _buildCartPage(),
+          _buildProfilePage(),
+        ],
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -121,19 +92,129 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget _buildHomePage() {
+    return SafeArea(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CustomAppBar(),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Discover',
+                  style: heading.copyWith(
+                    fontSize: 32,
+                    color: black.withOpacity(0.8),
+                  ),
+                ),
+                Text(
+                  'Find your perfect furniture',
+                  style: subHeading.copyWith(fontSize: 16),
+                ),
+              ],
+            ),
+          ),
+          SpaceVH(height: 20),
+          Container(
+            height: 70.0,
+            child: TabBarButton(
+              onCategorySelected: (categoryId) {
+                setState(() {
+                  selectedCategory = categoryId;
+                });
+              },
+            ),
+          ),
+          Expanded(
+            child: GridView.builder(
+              padding: EdgeInsets.all(20),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 0.7,
+                crossAxisSpacing: 15,
+                mainAxisSpacing: 15,
+              ),
+              itemCount: filteredModels.length,
+              itemBuilder: (context, index) {
+                return GridItemCard(model: filteredModels[index]);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCartPage() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.shopping_cart_outlined,
+            size: 100,
+            color: primary.withOpacity(0.5),
+          ),
+          SizedBox(height: 20),
+          Text(
+            'Your Cart is Empty',
+            style: heading.copyWith(
+              color: primary,
+              fontSize: 24,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProfilePage() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 120,
+            height: 120,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: primary.withOpacity(0.1),
+            ),
+            child: Icon(
+              Icons.person_outline,
+              size: 60,
+              color: primary,
+            ),
+          ),
+          SizedBox(height: 20),
+          Text(
+            'Profile',
+            style: heading.copyWith(
+              color: primary,
+              fontSize: 24,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildNavItem(int index, IconData icon, String label) {
     bool isSelected = selectedNavIndex == index;
     return InkWell(
       onTap: () {
         setState(() {
           selectedNavIndex = index;
-        });
-        if (index == 1) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => SearchPage()),
+          _pageController.animateToPage(
+            index,
+            duration: Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
           );
-        }
+        });
       },
       child: AnimatedContainer(
         duration: Duration(milliseconds: 200),
