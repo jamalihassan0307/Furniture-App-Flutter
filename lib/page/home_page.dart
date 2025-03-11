@@ -10,6 +10,7 @@ import 'package:uidesign03/widgets/grid_item_card.dart';
 import 'package:uidesign03/widgets/tabbar_button.dart';
 import 'package:uidesign03/page/search_page.dart';
 import 'package:uidesign03/widgets/drawer_page.dart';
+import 'package:uidesign03/widgets/bottom_nav_bar.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -62,31 +63,18 @@ class _HomePageState extends State<HomePage> {
         },
         children: [_buildHomePage(), SearchPage(), CartPage(), ProfilePage()],
       ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: white,
-          boxShadow: [
-            BoxShadow(
-              color: black.withOpacity(0.1),
-              blurRadius: 10,
-              offset: Offset(0, -5),
-            ),
-          ],
-        ),
-        child: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _buildNavItem(0, Icons.home_rounded, 'Home'),
-                _buildNavItem(1, Icons.search_rounded, 'Search'),
-                _buildNavItem(2, Icons.shopping_cart_rounded, 'Cart'),
-                _buildNavItem(3, Icons.person_rounded, 'Profile'),
-              ],
-            ),
-          ),
-        ),
+      bottomNavigationBar: BottomNavBar(
+        selectedIndex: selectedNavIndex,
+        onTap: (index) {
+          setState(() {
+            selectedNavIndex = index;
+            _pageController.animateToPage(
+              index,
+              duration: Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
+          });
+        },
       ),
     );
   }
@@ -175,49 +163,6 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildNavItem(int index, IconData icon, String label) {
-    bool isSelected = selectedNavIndex == index;
-    return InkWell(
-      onTap: () {
-        setState(() {
-          selectedNavIndex = index;
-          _pageController.animateToPage(
-            index,
-            duration: Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-          );
-        });
-      },
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: 200),
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-        decoration: BoxDecoration(
-          color: isSelected ? primary.withOpacity(0.1) : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Row(
-          children: [
-            Icon(
-              icon,
-              color: isSelected ? primary : lightBlack,
-              size: 24,
-            ),
-            if (isSelected) ...[
-              SizedBox(width: 8),
-              Text(
-                label,
-                style: TextStyle(
-                  color: primary,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ],
-        ),
       ),
     );
   }
