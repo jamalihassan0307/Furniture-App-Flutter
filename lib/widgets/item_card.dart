@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uidesign03/core/color.dart';
 import 'package:uidesign03/core/space.dart';
 import 'package:uidesign03/core/text_style.dart';
 import 'package:uidesign03/model/model.dart';
@@ -10,50 +11,85 @@ class ItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (builder) => DetailsPage(model: model)));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (builder) => DetailsPage(model: model),
+          ),
+        );
       },
       child: Container(
-        height: 140.0,
-        margin: EdgeInsets.only(bottom: 30.0),
+        padding: EdgeInsets.all(10),
+        margin: EdgeInsets.only(bottom: 15),
+        decoration: BoxDecoration(
+          color: white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: black.withOpacity(0.1),
+              blurRadius: 10,
+              offset: Offset(0, 5),
+            ),
+          ],
+        ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              width: 140.0,
-              child: Image.asset(model.image[0]),
+              height: 100,
+              width: 100,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Image.asset(
+                model.image[0],
+                fit: BoxFit.cover,
+              ),
             ),
-            Container(
-              width: 180.0,
+            SizedBox(width: 10),
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     model.name,
                     style: itemCardHeading,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  SpaceVH(height: 10.0),
+                  SizedBox(height: 5),
                   Text(
                     model.description,
-                    maxLines: 3,
                     style: itemCardDes,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  SpaceVH(height: 20.0),
-                  Text(
-                    model.price,
-                    style: itemCardPrice,
-                  )
+                  SizedBox(height: 5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        model.price,
+                        style: itemCardPrice,
+                      ),
+                      Container(
+                        height: 30,
+                        width: 30,
+                        decoration: BoxDecoration(
+                          color: primary,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Icon(
+                          Icons.add,
+                          color: white,
+                          size: 20,
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
-              ),
-            ),
-            IconButton(
-              onPressed: () {},
-              splashColor: Colors.transparent,
-              icon: Icon(
-                Icons.favorite_border_outlined,
               ),
             ),
           ],
