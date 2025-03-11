@@ -31,10 +31,10 @@ List<Model> models = [
   Model(
     name: 'Modern Lamp',
     image: [
-      'assets/images/lamp1.jpeg',
-      'assets/images/lamp2.jpg',
-      'assets/images/lamp3.jpg',
-      'assets/images/lamp4.jpg',
+      'assets/images/04.png',
+      'assets/images/03.png',
+      'assets/images/02.png',
+      'assets/images/01.png',
     ],
     price: '\$75.00',
     description: 'Contemporary lighting solution for modern homes',
@@ -43,9 +43,10 @@ List<Model> models = [
   Model(
     name: 'Designer Lamp',
     image: [
-      'assets/images/lamp5.jpg',
-      'assets/images/lamp6.jpg',
-      'assets/images/lamp7.jpg',
+      'assets/images/08.png',
+      'assets/images/07.png',
+      'assets/images/06.png',
+      'assets/images/05.png',
     ],
     price: '\$89.00',
     description: 'Artistic designer lamp for elegant home decor',
@@ -56,9 +57,10 @@ List<Model> models = [
   Model(
     name: 'Dining Table',
     image: [
-      'assets/images/table1.jpg',
-      'assets/images/table2.jpg',
-      'assets/images/table3.jpg',
+      'assets/images/01.png',
+      'assets/images/02.png',
+      'assets/images/03.png',
+      'assets/images/04.png',
     ],
     price: '\$299.00',
     description: 'Spacious dining table perfect for family gatherings',
@@ -67,9 +69,10 @@ List<Model> models = [
   Model(
     name: 'Coffee Table',
     image: [
-      'assets/images/table4.jpg',
-      'assets/images/table5.jpg',
-      'assets/images/table6.jpg',
+      'assets/images/05.png',
+      'assets/images/06.png',
+      'assets/images/07.png',
+      'assets/images/08.png',
     ],
     price: '\$149.00',
     description: 'Modern coffee table with sleek design',

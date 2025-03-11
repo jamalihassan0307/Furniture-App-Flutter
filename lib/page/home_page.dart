@@ -7,7 +7,35 @@ import 'package:uidesign03/widgets/Custom_app_bar.dart';
 import 'package:uidesign03/widgets/item_card.dart';
 import 'package:uidesign03/widgets/tabbar_button.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int selectedCategory = 0;
+
+  List get filteredModels {
+    if (selectedCategory == 0) {
+      return models;
+    } else {
+      return models.where((model) {
+        switch (selectedCategory) {
+          case 1:
+            return model.category == 'Chairs';
+          case 2:
+            return model.category == 'Lamps';
+          case 3:
+            return model.category == 'Tables';
+          case 4:
+            return model.category == 'Sofas';
+          default:
+            return true;
+        }
+      }).toList();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,16 +59,23 @@ class HomePage extends StatelessWidget {
             SpaceVH(height: 20),
             Container(
               height: 70.0,
-              child: TabBarButton(),
+              child: TabBarButton(
+                onCategorySelected: (categoryId) {
+                  setState(() {
+                    selectedCategory = categoryId;
+                  });
+                },
+              ),
             ),
             Expanded(
               child: ListView.builder(
-                  physics: BouncingScrollPhysics(),
-                  itemCount: models.length,
-                  itemBuilder: (builder, index) {
-                    final model = models[index];
-                    return ItemCard(model: model);
-                  }),
+                physics: BouncingScrollPhysics(),
+                itemCount: filteredModels.length,
+                itemBuilder: (builder, index) {
+                  final model = filteredModels[index];
+                  return ItemCard(model: model);
+                },
+              ),
             ),
           ],
         ),
