@@ -86,7 +86,17 @@ class _DetailsPageState extends State<DetailsPage> {
                               height: 40,
                               width: 40,
                               margin: EdgeInsets.symmetric(vertical: 5.0),
-                              child: Image.asset(widget.model.image[i]),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: selectIndex == i ? primary : Colors.transparent,
+                                  width: 2,
+                                ),
+                                image: DecorationImage(
+                                  image: AssetImage(widget.model.image[i]),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                             ),
                           )
                       ],
@@ -97,10 +107,28 @@ class _DetailsPageState extends State<DetailsPage> {
                   padding: EdgeInsets.only(right: 10.0),
                   child: Align(
                     alignment: Alignment.centerRight,
-                    child: Image.asset(
-                      widget.model.image[selectIndex],
-                      fit: BoxFit.cover,
-                      width: height / 2.8,
+                    child: Hero(
+                      tag: 'image_${widget.model.image[0]}',
+                      child: Container(
+                        width: height / 2.8,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: black.withOpacity(0.2),
+                              blurRadius: 15,
+                              offset: Offset(0, 5),
+                            ),
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.asset(
+                            widget.model.image[selectIndex],
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 )
