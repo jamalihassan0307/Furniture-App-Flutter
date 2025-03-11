@@ -29,19 +29,16 @@ class _SearchPageState extends State<SearchPage> {
     setState(() {
       _filteredItems = models.where((item) {
         bool matchesSearch = item.name.toLowerCase().contains(
-              _searchController.text.toLowerCase(),
-            ) ||
+                  _searchController.text.toLowerCase(),
+                ) ||
             item.description.toLowerCase().contains(
                   _searchController.text.toLowerCase(),
                 );
 
-        bool matchesCategory =
-            _selectedCategory == 'All' || item.category == _selectedCategory;
+        bool matchesCategory = _selectedCategory == 'All' || item.category == _selectedCategory;
 
-        double price = double.parse(
-            item.price.replaceAll('\$', '').replaceAll(',', ''));
-        bool matchesPrice = price >= _currentPriceRange.start &&
-            price <= _currentPriceRange.end;
+        double price = double.parse(item.price.replaceAll('\$', '').replaceAll(',', ''));
+        bool matchesPrice = price >= _currentPriceRange.start && price <= _currentPriceRange.end;
 
         return matchesSearch && matchesCategory && matchesPrice;
       }).toList();
@@ -154,9 +151,7 @@ class _SearchPageState extends State<SearchPage> {
                                     selectedColor: primary,
                                     backgroundColor: background,
                                     labelStyle: TextStyle(
-                                      color: _selectedCategory == _categories[index]
-                                          ? white
-                                          : primary,
+                                      color: _selectedCategory == _categories[index] ? white : primary,
                                     ),
                                     elevation: 0,
                                     pressElevation: 2,
@@ -254,32 +249,6 @@ class _SearchPageState extends State<SearchPage> {
           ],
         ),
       ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: white,
-          boxShadow: [
-            BoxShadow(
-              color: black.withOpacity(0.1),
-              blurRadius: 10,
-              offset: Offset(0, -5),
-            ),
-          ],
-        ),
-        child: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _buildNavItem(0, Icons.home_rounded, 'Home', false),
-                _buildNavItem(1, Icons.search_rounded, 'Search', true),
-                _buildNavItem(2, Icons.shopping_cart_rounded, 'Cart', false),
-                _buildNavItem(3, Icons.person_rounded, 'Profile', false),
-              ],
-            ),
-          ),
-        ),
-      ),
     );
   }
 
@@ -325,4 +294,4 @@ class _SearchPageState extends State<SearchPage> {
       ),
     );
   }
-} 
+}
