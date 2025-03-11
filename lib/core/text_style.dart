@@ -7,36 +7,43 @@ const TextStyle heading = TextStyle(
   color: black,
   fontSize: 36,
   fontWeight: FontWeight.bold,
+  letterSpacing: 0.5,
 );
 
 const TextStyle subHeading = TextStyle(
   color: lightBlack,
   fontSize: 18,
-  fontWeight: FontWeight.w400,
+  fontWeight: FontWeight.w500,
+  letterSpacing: 0.1,
 );
 
 const TextStyle tabButtonS = TextStyle(
-  color: black,
+  color: primary,
   fontSize: 18,
   fontWeight: FontWeight.w700,
 );
+
 const TextStyle tabButtonU = TextStyle(
   color: lightBlack,
-  fontSize: 18,
-  fontWeight: FontWeight.w400,
+  fontSize: 16,
+  fontWeight: FontWeight.w500,
 );
 
 const TextStyle itemCardHeading = TextStyle(
   color: black,
-  fontSize: 20,
+  fontSize: 22,
   fontWeight: FontWeight.w700,
+  letterSpacing: 0.2,
 );
+
 const TextStyle itemCardDes = TextStyle(
   color: lightBlack,
-  fontSize: 15,
+  fontSize: 16,
+  height: 1.5,
 );
+
 const TextStyle itemCardPrice = TextStyle(
-  color: black,
-  fontSize: 17,
+  color: primary,
+  fontSize: 20,
   fontWeight: FontWeight.w700,
 );
