@@ -14,6 +14,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int selectedCategory = 0;
+  int selectedNavIndex = 0;
 
   List get filteredModels {
     if (selectedCategory == 0) {
@@ -39,22 +40,31 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: white,
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.0),
+      backgroundColor: background,
+      body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomAppBar(),
-            Text(
-              'Furniture in\nunique style',
-              style: heading,
-            ),
-            SpaceVH(height: 10),
-            Text(
-              'We have wide rang of Furniture',
-              style: subHeading,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Discover',
+                    style: heading.copyWith(
+                      fontSize: 32,
+                      color: black.withOpacity(0.8),
+                    ),
+                  ),
+                  Text(
+                    'Find your perfect furniture',
+                    style: subHeading.copyWith(fontSize: 16),
+                  ),
+                ],
+              ),
             ),
             SpaceVH(height: 20),
             Container(
@@ -69,6 +79,7 @@ class _HomePageState extends State<HomePage> {
             ),
             Expanded(
               child: ListView.builder(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
                 physics: BouncingScrollPhysics(),
                 itemCount: filteredModels.length,
                 itemBuilder: (builder, index) {
@@ -80,62 +91,69 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        elevation: 0.0,
-        child: Container(
-          height: 100.0,
-          color: primary,
-          child: Stack(
-            children: [
-              Align(
-                alignment: Alignment.topCenter,
-                child: Container(
-                  height: 40.0,
-                  decoration: BoxDecoration(
-                    color: white,
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(50.0),
-                      bottomRight: Radius.circular(50.0),
-                    ),
-                  ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    bottomNavButton(
-                      onPress: () {},
-                      icon: Icons.home_outlined,
-                    ),
-                    SpaceVH(width: 60),
-                    bottomNavButton(
-                      onPress: () {},
-                      icon: Icons.chat_outlined,
-                    ),
-                    SpaceVH(width: 60),
-                    bottomNavButton(
-                      onPress: () {},
-                      icon: Icons.person_outline_outlined,
-                    ),
-                  ],
-                ),
-              ),
-            ],
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: white,
+          boxShadow: [
+            BoxShadow(
+              color: black.withOpacity(0.1),
+              blurRadius: 10,
+              offset: Offset(0, -5),
+            ),
+          ],
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildNavItem(0, Icons.home_rounded, 'Home'),
+                _buildNavItem(1, Icons.search_rounded, 'Search'),
+                _buildNavItem(2, Icons.shopping_cart_rounded, 'Cart'),
+                _buildNavItem(3, Icons.person_rounded, 'Profile'),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  IconButton bottomNavButton({required Function() onPress, required IconData icon}) {
-    return IconButton(
-      onPressed: onPress,
-      icon: Icon(
-        icon,
-        size: 40,
-        color: white,
+  Widget _buildNavItem(int index, IconData icon, String label) {
+    bool isSelected = selectedNavIndex == index;
+    return InkWell(
+      onTap: () {
+        setState(() {
+          selectedNavIndex = index;
+        });
+      },
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 200),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? primary.withOpacity(0.1) : Colors.transparent,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              color: isSelected ? primary : lightBlack,
+              size: 24,
+            ),
+            if (isSelected) ...[
+              SizedBox(width: 8),
+              Text(
+                label,
+                style: TextStyle(
+                  color: primary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }
