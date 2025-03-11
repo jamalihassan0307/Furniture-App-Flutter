@@ -89,10 +89,10 @@ class _ItemCardState extends State<ItemCard> with SingleTickerProviderStateMixin
                             width: 100,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Image.asset(
-                              widget.model.image[0],
-                              fit: BoxFit.cover,
+                              image: DecorationImage(
+                                image: AssetImage(widget.model.image[0]),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         ),
