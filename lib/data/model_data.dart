@@ -3,6 +3,7 @@ import 'package:uidesign03/model/model.dart';
 List<Model> models = [
   // Chairs
   Model(
+    id: 'chair1',
     name: 'Modern Chair',
     image: [
       'assets/images/01.png',
@@ -15,6 +16,7 @@ List<Model> models = [
     category: 'Chairs',
   ),
   Model(
+    id: 'chair2',
     name: 'Classic Chair',
     image: [
       'assets/images/05.png',
@@ -29,6 +31,7 @@ List<Model> models = [
 
   // Tables
   Model(
+    id: 'table1',
     name: 'Dining Table',
     image: [
       'assets/images/table1.jpg',
@@ -39,6 +42,7 @@ List<Model> models = [
     category: 'Tables',
   ),
   Model(
+    id: 'table2',
     name: 'Coffee Table',
     image: [
       'assets/images/table3.jpg',
@@ -49,6 +53,7 @@ List<Model> models = [
     category: 'Tables',
   ),
   Model(
+    id: 'table3',
     name: 'Cafe Table',
     image: [
       'assets/images/table5.jpg',
@@ -62,6 +67,7 @@ List<Model> models = [
 
   // Lamps
   Model(
+    id: 'lamp1',
     name: 'Modern Lamp',
     image: [
       'assets/images/lamp1.jpeg',
@@ -72,6 +78,7 @@ List<Model> models = [
     category: 'Lamps',
   ),
   Model(
+    id: 'lamp2',
     name: 'Designer Lamp',
     image: [
       'assets/images/lamp3.jpg',
@@ -82,6 +89,7 @@ List<Model> models = [
     category: 'Lamps',
   ),
   Model(
+    id: 'lamp3',
     name: 'Floor Lamp',
     image: [
       'assets/images/lamp5.jpg',
@@ -95,6 +103,7 @@ List<Model> models = [
 
   // Sofas
   Model(
+    id: 'sofa1',
     name: 'Modern Sofa',
     image: [
       'assets/images/sofa1.png',
@@ -106,6 +115,7 @@ List<Model> models = [
     category: 'Sofas',
   ),
   Model(
+    id: 'sofa2',
     name: 'Luxury Sofa',
     image: [
       'assets/images/sofa4.jpg',
@@ -117,6 +127,7 @@ List<Model> models = [
     category: 'Sofas',
   ),
   Model(
+    id: 'sofa3',
     name: 'Corner Sofa',
     image: [
       'assets/images/sofa7.jpg',
