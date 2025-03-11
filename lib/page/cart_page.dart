@@ -14,6 +14,9 @@ class _CartPageState extends State<CartPage> {
 
   @override
   Widget build(BuildContext context) {
+    final allItems = _cartManager.items;
+    final staticItems = _cartManager.staticItems;
+
     return SafeArea(
       child: Column(
         children: [
@@ -39,8 +42,35 @@ class _CartPageState extends State<CartPage> {
           ),
           // Cart Items
           Expanded(
-            child: _cartManager.items.isEmpty
-                ? Center(
+            child: ListView(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              children: [
+                // Static Items Section
+                if (staticItems.isNotEmpty) ...[
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    child: Text(
+                      'Saved Items',
+                      style: heading.copyWith(fontSize: 20),
+                    ),
+                  ),
+                  ...staticItems.map((item) => _buildCartItem(item, isStatic: true)),
+                ],
+
+                // Regular Items Section
+                if (allItems.length > staticItems.length) ...[
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    child: Text(
+                      'Cart Items',
+                      style: heading.copyWith(fontSize: 20),
+                    ),
+                  ),
+                  ...allItems.where((item) => !staticItems.contains(item)).map((item) => _buildCartItem(item)),
+                ],
+
+                if (allItems.isEmpty)
+                  Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -59,15 +89,9 @@ class _CartPageState extends State<CartPage> {
                         ),
                       ],
                     ),
-                  )
-                : ListView.builder(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    itemCount: _cartManager.items.length,
-                    itemBuilder: (context, index) {
-                      final item = _cartManager.items[index];
-                      return _buildCartItem(item);
-                    },
                   ),
+              ],
+            ),
           ),
           // Bottom Section
           if (_cartManager.items.isNotEmpty)
@@ -139,7 +163,7 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
-  Widget _buildCartItem(CartItem item) {
+  Widget _buildCartItem(CartItem item, {bool isStatic = false}) {
     return Container(
       margin: EdgeInsets.only(bottom: 15),
       padding: EdgeInsets.all(10),
@@ -187,30 +211,24 @@ class _CartPageState extends State<CartPage> {
             ),
           ),
           // Quantity
-          Row(
-            children: [
-              IconButton(
-                icon: Icon(Icons.remove_circle_outline),
-                onPressed: () {
-                  setState(() {
+          if (!isStatic)
+            Row(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.remove_circle_outline),
+                  onPressed: () => setState(() {
                     _cartManager.updateQuantity(item.id, item.quantity - 1);
-                  });
-                },
-              ),
-              Text(
-                '${item.quantity}',
-                style: itemCardHeading,
-              ),
-              IconButton(
-                icon: Icon(Icons.add_circle_outline),
-                onPressed: () {
-                  setState(() {
+                  }),
+                ),
+                Text('${item.quantity}', style: itemCardHeading),
+                IconButton(
+                  icon: Icon(Icons.add_circle_outline),
+                  onPressed: () => setState(() {
                     _cartManager.updateQuantity(item.id, item.quantity + 1);
-                  });
-                },
-              ),
-            ],
-          ),
+                  }),
+                ),
+              ],
+            ),
         ],
       ),
     );
