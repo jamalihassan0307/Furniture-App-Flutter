@@ -94,8 +94,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  IconButton bottomNavButton(
-      {required Function() onPress, required IconData icon}) {
+  IconButton bottomNavButton({required Function() onPress, required IconData icon}) {
     return IconButton(
       onPressed: onPress,
       icon: Icon(

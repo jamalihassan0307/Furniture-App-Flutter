@@ -137,14 +137,12 @@ class _DetailsPageState extends State<DetailsPage> {
                               },
                               child: Text(
                                 '+',
-                                style:
-                                    itemCardHeading.copyWith(color: lightBlack),
+                                style: itemCardHeading.copyWith(color: lightBlack),
                               ),
                             ),
                             Text(
                               '$qty',
-                              style:
-                                  itemCardHeading.copyWith(color: lightBlack),
+                              style: itemCardHeading.copyWith(color: lightBlack),
                             ),
                             MaterialButton(
                               minWidth: 10,
@@ -156,8 +154,7 @@ class _DetailsPageState extends State<DetailsPage> {
                               },
                               child: Text(
                                 '-',
-                                style:
-                                    itemCardHeading.copyWith(color: lightBlack),
+                                style: itemCardHeading.copyWith(color: lightBlack),
                               ),
                             ),
                           ],
