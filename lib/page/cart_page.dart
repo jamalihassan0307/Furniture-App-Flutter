@@ -15,6 +15,7 @@ class _CartPageState extends State<CartPage> {
   Widget build(BuildContext context) {
     return Consumer<CartManager>(
       builder: (context, cartManager, child) {
+        print("cartManager: ${cartManager.items}");
         return SafeArea(
           child: Column(
             children: [
@@ -40,7 +41,7 @@ class _CartPageState extends State<CartPage> {
               ),
               // Cart Items
               Expanded(
-                child: cartManager.items.isEmpty
+                child: cartManager.items.length == 0
                     ? Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,

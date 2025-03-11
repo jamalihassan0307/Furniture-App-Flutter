@@ -33,6 +33,8 @@ class CartManager extends ChangeNotifier {
     } else {
       _items.add(item);
     }
+    print(_items);
+    print("items: ${_items.length}+ Items${items}");
     _calculateTotal();
     notifyListeners();
   }
@@ -67,4 +69,4 @@ class CartManager extends ChangeNotifier {
   bool isInCart(String id) {
     return _items.any((item) => item.id == id);
   }
-} 
+}

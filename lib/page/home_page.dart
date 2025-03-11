@@ -3,10 +3,13 @@ import 'package:uidesign03/core/color.dart';
 import 'package:uidesign03/core/space.dart';
 import 'package:uidesign03/core/text_style.dart';
 import 'package:uidesign03/data/model_data.dart';
+import 'package:uidesign03/page/cart_page.dart';
+import 'package:uidesign03/page/profile_page.dart';
 import 'package:uidesign03/widgets/Custom_app_bar.dart';
 import 'package:uidesign03/widgets/grid_item_card.dart';
 import 'package:uidesign03/widgets/tabbar_button.dart';
 import 'package:uidesign03/page/search_page.dart';
+import 'package:uidesign03/widgets/drawer_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -49,6 +52,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: background,
+      drawer: DrawerPage(),
       body: PageView(
         controller: _pageController,
         onPageChanged: (index) {
@@ -56,12 +60,7 @@ class _HomePageState extends State<HomePage> {
             selectedNavIndex = index;
           });
         },
-        children: [
-          _buildHomePage(),
-          SearchPage(),
-          _buildCartPage(),
-          _buildProfilePage(),
-        ],
+        children: [_buildHomePage(), SearchPage(), CartPage(), ProfilePage()],
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -142,29 +141,6 @@ class _HomePageState extends State<HomePage> {
               itemBuilder: (context, index) {
                 return GridItemCard(model: filteredModels[index]);
               },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCartPage() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.shopping_cart_outlined,
-            size: 100,
-            color: primary.withOpacity(0.5),
-          ),
-          SizedBox(height: 20),
-          Text(
-            'Your Cart is Empty',
-            style: heading.copyWith(
-              color: primary,
-              fontSize: 24,
             ),
           ),
         ],
